@@ -1,8 +1,7 @@
-![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/appmsw-tele.png)
-## appmsw-telestat
-[![Gitter](https://img.shields.io/badge/Available%20on-Intersystems%20Open%20Exchange-00b2a9.svg)](https://openexchange.intersystems.com/package/appmsw-telestat)
-[![GitHub all releases](https://img.shields.io/badge/Available%20on-GitHub-black)](https://github.com/SergeyMi37/appmsw-telestat)
-[![Habr](https://img.shields.io/badge/Available%20article%20on-Intersystems%20Community-orange)](https://community.intersystems.com/post/organization-message-notification-and-provision-information-users-messenger-telegam-using-two)
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telealerts/main/doc/status-serv.png)
+## appmsw-telealerts
+[![Gitter](https://img.shields.io/badge/Available%20on-Intersystems%20Open%20Exchange-00b2a9.svg)](https://openexchange.intersystems.com/package/appmsw-telealerts)
+[![GitHub all releases](https://img.shields.io/badge/Available%20on-GitHub-black)](https://github.com/SergeyMi37/appmsw-telealerts)
 [![license](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
@@ -13,9 +12,19 @@ https://github.com/intersystems-community/TelegramAlerts
 
 During the installation and configuration process, we will create an informant bot and an admin bot, which will allow the informant bot to provide users with the requested content.
 
+## What's new
+A service has been added to the project to support informing via telegram messenger and email about the status of products and systems
+
 ## Installation with ZPM
 
-zpm:USER>install appmsw-telestat
+If ZPM the current instance is not installed, then in one line you can install the latest version of ZPM.
+```
+zn "%SYS" d ##class(Security.SSLConfigs).Create("z") s r=##class(%Net.HttpRequest).%New(),r.Server="pm.community.intersystems.com",r.SSLConfiguration="z" d r.Get("/packages/zpm/latest/installer"),$system.OBJ.LoadStream(r.HttpResponse.Data,"c")
+```
+If ZPM is installed, then ZAPM can be set with the command
+```
+zpm:USER>install appmsw-telealerts
+```
 
 ## Installation with Docker
 
@@ -26,7 +35,7 @@ Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installi
 Clone/git pull the repo into any local directory
 
 ```
-$ git clone https://github.com/SergeyMi37/appmsw-telestat.git
+$ git clone https://github.com/SergeyMi37/appmsw-telealerts.git
 ```
 
 Open the terminal in this directory and run:
@@ -47,7 +56,7 @@ $ docker-compose exec iris iris session iris
 If you do not have a Telegram messenger account, then this is just a reason to create it.
 So, let's create an administrator bot. To do this, find BotsFather, join it and enter the /newbot command.
 
-![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_1.png)
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telealerts/main/doc/Screenshot_1.png)
 
 Then we will create an informant bot and save their names and tokens to enter when installing the module using the package manager.
 
@@ -56,19 +65,19 @@ Then we will create an informant bot and save their names and tokens to enter wh
 ```
 USER>
 USER>zpm
-zpm:USER>install appmsw-telestat
+zpm:USER>install appmsw-telealerts
 ```
 Or if from docker
 ```
 zpm:USER>load /opt/irisapp
 
-[appmsw-telestat]       Module object refreshed.
-[appmsw-telestat]       Validate START
-[appmsw-telestat]       Validate SUCCESS
-[appmsw-telestat]       Compile START
-[appmsw-telestat]       Compile SUCCESS
-[appmsw-telestat]       Activate START
-[appmsw-telestat]       Configure START
+[appmsw-telealerts]       Module object refreshed.
+[appmsw-telealerts]       Validate START
+[appmsw-telealerts]       Validate SUCCESS
+[appmsw-telealerts]       Compile START
+[appmsw-telealerts]       Compile SUCCESS
+[appmsw-telealerts]       Activate START
+[appmsw-telealerts]       Configure START
 Shall we enter names and tokens ? [y,n] <y> y
 
 Enter the username of the admin bot IrisContestAdminInformerbot 
@@ -80,13 +89,13 @@ Enter the token to access of the informer bot sY5NxkS0QXRXdjxmbrIWJWLOA
 If you make a mistake, or BotFather changed the token, you can always retry later by performing a utility ##class(appmsw.telestat.API.util).Init()
 Product items changed successfully
 
-[appmsw-telestat]       Configure SUCCESS
-[appmsw-telestat]       Activate SUCCESS
+[appmsw-telealerts]       Configure SUCCESS
+[appmsw-telealerts]       Activate SUCCESS
 ```
 The program memorized names, tokens and phone numbers in the table `appmsw.telestat.Bots`
 After that, we will open the product and launch it.
 
-![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_7.png)
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telealerts/main/doc/Screenshot_7.png)
 
 ## Configuring a bot admin
 
@@ -103,7 +112,7 @@ You can test notifications to the Admin bot with a command in the terminal
 ```
 user>zwrite ##class(appmsw.telestat.API.util).ToAdmin("Contest")
 ```
-![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_8.png)
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telealerts/main/doc/Screenshot_8.png)
 
 ## Configuring a bot informant
 We will find the informant in the telegram created by the bot and connect to it by pressing the `START` button.
@@ -111,7 +120,7 @@ The product service will prepare a message and also offer to show the phone numb
 
 The bot admin will receive a message about sending the phone, and by selecting the Allow or Deny buttons, you will make a decision that will come in response to the bot informant.
 
-![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_3.png)
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telealerts/main/doc/Screenshot_3.png)
 
 But even if access to information was denied, ChatId and the phone number were entered in the `appmsw.telestat.Bots` table and the bot informant can be sent a message using the utility
 ```
@@ -130,15 +139,15 @@ Bot administration service for tracking Ensemble and IRIS servers. Can take comm
 ```
 For the administrator bot, it is possible to view and edit user attributes with the `/Userlist` command
 
-![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_4.png)
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telealerts/main/doc/Screenshot_4.png)
 
 Another command /GetLastAlerts is implemented more as an example.
 
-![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_5.png)
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telealerts/main/doc/Screenshot_5.png)
 
 And the `appmsw.telestat.TelegramServiceAlert` service is configured to periodically check system messages and if their level of importance is more than 2, display them to all users connected to the bot informant who have the notification field set to `yes`
 
-![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_6.png)
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telealerts/main/doc/Screenshot_6.png)
 
 The list of commands and content is expanding. It is enough to create your own class similar to `appmsw.telestat.API.commands` And a method `GetCommands` For a list of commands and `GetAlerts` To get content on them.
 

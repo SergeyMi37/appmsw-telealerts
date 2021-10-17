@@ -105,12 +105,12 @@ ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Statu
 				else  set Mess=" Error "_$System.Status.GetErrorText(st)
 				set msg.Text = msg.Text _ Mess
 			} else {		
-				set msg.Text = "Your number is not included in the allowed table. Check the correctness of the initial data"
+				set msg.Text = "Your number '"_phone_"' is not included in the allowed table. Check the correctness of the initial data"
 			}
 		}
 		else {
 			s emo=$wc($zhex("1F6AB")) ;
-			set msg.Text =emo_$$$FormatText("Command (%1) is not supported",pInput.message.text)
+			set msg.Text =emo_$$$FormatText("Command (%1) is not supported, use /start",pInput.message.text)
 		}
 	}
 	Catch ex {

@@ -1,3 +1,5 @@
+Include apptools.core
+
 Class appmsw.telestat.API.service Extends Ens.BusinessService
 {
 
@@ -31,8 +33,8 @@ ClassMethod InitMessage(pInput As %RegisteredObject, Token, Output msg, ChatId, 
 {
     set msg = ##class(appmsw.telestat.Msg.TextRequest).%New()
     set ChatId = pInput.message.chat.id ;user chat id
-	;set $$$AppL("TLG",ChatId_"-input")=$$$AppObJs(pInput)
-
+	set $$$AppL("TLG",ChatId_"-input")=$$$AppObJs(pInput)
+	set $$$AppL("TLG",ChatId_"-input-Token")=Token
     set NameFirst=pInput.message.from."first_name"
     set NameLast=pInput.message.from."last_name"
 	if '$D(@..#GNtmp@("Users"_IsAdmin,ChatId)) set @..#GNtmp@("Users",ChatId)=$LB(NameFirst,NameLast)
@@ -79,7 +81,7 @@ ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Statu
 				
 				if $GET(cmd(comm))'="" set command=$GET(cmd(comm))
 				else  set command=$GET(@..#GNtmp@("Command",ChatId,comm))
-				if command="" set msg.Text="Error node command" quit
+				if command="" set msg.Text="Error node command "_comm quit
 				
 				;s ^tmp($i(^tmp),"set")=$lg(command,3)
 				
@@ -107,7 +109,7 @@ ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Statu
 				set GNtmp=..#GNtmp
 				set gnId=$i(@..#GNtmp@("Admin"))
 				set @..#GNtmp@("Admin",gnId)=$lb($h,token,ChatId,phone,NameFirst,NameLast)
-				set butt="=Access:Yes("_gnId_"),=Access:Deny("_gnId_")"
+				set butt="=Access:Yes:"_gnId_",=Access:Deny:"_gnId
 				do ##class(appmsw.telestat.API.util).ToAdmin(" Request for access to information from "_from,butt)
 			} else {		
 				//if you have permission
@@ -115,15 +117,16 @@ ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Statu
 			}
 		} else  {
 			s emo=$wc($zhex("1F6AB")) ;
-			set msg.Text =emo_$$$FormatText("Command (%1) is not supported",pInput.message.text)
+			set msg.Text =emo_$$$FormatText("Command (%1) is not supported, use /start",pInput.message.text)
 		}
 	}
 	Catch ex {
+		set $$$AppL("TLG",ChatId_"-Error")=$ZE
 	   set msg.Text=msg.Text_$g(Text)_"Error "_$ZE_$$$NL
 	}
 
 	set msg.ChatId = pInput.message.chat.id	
-	;set $$$AppL("TLG",ChatId_"-Output")=$$$AppObJs(msg)
+	set $$$AppL("TLG",ChatId_"-Output")=$$$AppObJs(msg)
 	return $$$OK
 }
 
