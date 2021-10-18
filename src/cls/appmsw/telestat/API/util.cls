@@ -12,6 +12,7 @@ ClassMethod Init(ByRef bots) As %String
  	if '($p="00" || ($p["/nul")) { // current device is not terminal
 	 	read !,"Shall we enter names and tokens ? [y,n] <y> ",*R:5
 	 	if R="-1"||("13,121,89"'[R) write !,..WriteMessInit(1) quit $$$OK
+	 	set bots=""
  	}
  }
  if '$D(bots) quit $$$ERROR($$$GeneralError,"Bots information is empty")
@@ -56,7 +57,7 @@ ClassMethod Init(ByRef bots) As %String
 /// write ##class(appmsw.telestat.API.util).InitBots()
 ClassMethod InitBots(ByRef bots) As %String
 {
-	if '$DATA(bots) {
+	if $DATA(bots)<9 {
 		for bot="admin","informer" {
 Again1		write !,"Enter the username of the "_bot_" bot "
 			read username 
