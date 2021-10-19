@@ -10,7 +10,7 @@ ClassMethod Init(ByRef bots) As %String
 {
  if '$D(bots) {
  	if '($p="00" || ($p["/nul")) { // current device is not terminal
-	 	read !,"Shall we enter names and tokens ? [y,n] <y> ",*R:5
+	 	read !,"Shall we enter tokens ? [y,n] <y> ",*R:5
 	 	if R="-1"||("13,121,89"'[R) write !,..WriteMessInit(1) quit $$$OK
 	 	set bots=""
  	}
@@ -59,10 +59,10 @@ ClassMethod InitBots(ByRef bots) As %String
 {
 	if $DATA(bots)<9 {
 		for bot="admin","informer" {
-Again1		write !,"Enter the username of the "_bot_" bot "
-			read username 
-			if username="" write !," You entered an empty value" goto Again1
-			write " ["_username_"]"
+Again1		//;write !,"Enter the username of the!!! "_bot_" bot "
+			//;read username 
+			//;if username="" write !," You entered an empty value" goto Again1
+			//;write " ["_username_"]"
 Again2		write !,"Enter the token to access of the "_bot_" bot "
 			read token
 			if token="" write !," You entered an empty value" goto Again2
@@ -72,10 +72,11 @@ Again2		write !,"Enter the token to access of the "_bot_" bot "
 Again3			write !,"Enter the number phone of the "_bot_" bot "
 				read number
 				if number="" write !," You entered an empty value" goto Again3
+				set number=$tr(number,"-()+")
 				write " ["_number_"]"
 			}
 			
-			set bots(bot)=$lb(username,token,number)
+			set bots(bot)=$lb(bot,token,number)
 		}
 	}
 	for bot="admin","informer" {
@@ -202,4 +203,3 @@ ClassMethod ToInformer(Phone = "", ChatId = "", Token = "", msg, buttonstext = "
 }
 
 }
-
