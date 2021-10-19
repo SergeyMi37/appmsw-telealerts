@@ -15,18 +15,12 @@ ClassMethod ServersStatus(arg, ByRef return, command, ChatId = "", Token = "", N
 /// do ##class(appmsw.telestat.API.status).GetListServers(.srv)
 ClassMethod GetListServers(res) As %Status
 {
-	set url="http://servname/apptoolsrest/products/" ;  ##class(apptools.core.rest).getProductions
-	set aurl="http://servname/apptoolsrest/alerts/3" ;alerts for 3 days  ##class(apptools.core.rest).GetAlerts
-	
-	;set res("prod")=$lb($replace(url,"servname","iris"),"UserTeleStat","UserTeleStat2021","iris",$replace(aurl,"servname","iris"))
-	;set res("test")=$lb($replace(url,"servname","iris-test"),"UserTeleStat","UserTeleStat2021","iris-test",$replace(aurl,"servname","iris-test"))
-	;set res("test20203")=$lb($replace(url,"servname","iris-test:52773"),"UserTeleStat","UserTeleStat2021","IRIS20203",$replace(aurl,"servname","iris-test:52773"))
-	;set res("docker215")=$lb($replace(url,"servname","172.16.253.215:49157"),"UserTeleStat","UserTeleStat2021","Docker",$replace(aurl,"servname","172.16.253.215:49157"))
-	if ##class(appmsw.telestat.API.inst).GetList(,.res)
+	do ##class(appmsw.telestat.API.inst).GetList(,.res)
+	quit $$$OK
 }
 
 /// Get a brief status of all systems
-/// do ##class(appmsw.telestat.API.status).GetStat()
+/// write ##class(appmsw.telestat.API.status).GetStat("ChatId123")
 ClassMethod GetStat(ChatId) As %Status
 {
 	set ret="Status sytems:"_$$$NL
@@ -124,7 +118,7 @@ ClassMethod GetProductErr(nodens, ByRef return, command, ChatId = "", Token = ""
 {
 	set node=$lg(nodens,1)
 	set ns=$lg(nodens,2)
-	do ##class(appmsw.telestat.API.inst).GetList(node.res)
+	do ##class(appmsw.telestat.API.inst).GetList(node,.res)
 	set str=$g(res(1))
 	set ret="List first errors of "_ns_$$$NL
 	if str="" { 

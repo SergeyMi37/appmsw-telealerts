@@ -203,3 +203,4 @@ ClassMethod ToInformer(Phone = "", ChatId = "", Token = "", msg, buttonstext = "
 }
 
 }
+

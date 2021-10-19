@@ -35,7 +35,8 @@ ClassMethod GetList(Name = "", ByRef list) As %Status
 {
 	 set sql="Select ServiceProducts,UserName,UserPass,Name,ServiceAlerts,Enabled FROM appmsw_telestat_API.inst"
 	 if Name'="" set sql=sql_" where Name='"_Name_"'"
-	 do ##class(apptools.core.sys).SaveSQL(sql,"list")
+	 do ##class(apptools.core.sys).SaveSQL(sql,"^||list")
+	 merge list=^||list
  	quit $$$OK
 }
 
