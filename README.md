@@ -78,12 +78,10 @@ zpm:USER>load /opt/irisapp
 [appmsw-telealerts]       Compile SUCCESS
 [appmsw-telealerts]       Activate START
 [appmsw-telealerts]       Configure START
-Shall we enter names and tokens ? [y,n] <y> y
+Shall we enter tokens ? [y,n] <y> y
 
-Enter the username of the admin bot IrisContestAdminInformerbot 
 Enter the token to access of the admin bot 794:AAGjZjag9Yr6LzYVbRESIBqk3HIbc 
 Enter the number phone of the admin bot 77777777 [7777777]
-Enter the username of the informer bot IrisContestInformerbot [IrisContestInformerbot]
 Enter the token to access of the informer bot sY5NxkS0QXRXdjxmbrIWJWLOA 
 
 If you make a mistake, or BotFather changed the token, you can always retry later by performing a utility ##class(appmsw.telestat.API.util).Init()
