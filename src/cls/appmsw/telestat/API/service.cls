@@ -33,8 +33,8 @@ ClassMethod InitMessage(pInput As %RegisteredObject, Token, Output msg, ChatId, 
 {
     set msg = ##class(appmsw.telestat.Msg.TextRequest).%New()
     set ChatId = pInput.message.chat.id ;user chat id
-	set $$$AppL("TLG",ChatId_"-input")=$$$AppObJs(pInput)
-	set $$$AppL("TLG",ChatId_"-input-Token")=Token
+	;set $$$AppL("TLG",ChatId_"-input")=$$$AppObJs(pInput)
+	;set $$$AppL("TLG",ChatId_"-input-Token")=Token
     set NameFirst=pInput.message.from."first_name"
     set NameLast=pInput.message.from."last_name"
 	if '$D(@..#GNtmp@("Users"_IsAdmin,ChatId)) set @..#GNtmp@("Users",ChatId)=$LB(NameFirst,NameLast)
@@ -89,6 +89,7 @@ ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Statu
 	  			  if $lg(command,5)'="" xecute "do "_$lg(command,5) //routine TODO
 	  			  else  do $classmethod($lg(command,1),$lg(command,2),$lg(command,3),.return,command,ChatId,token,NameFirst,NameLast)
 	  			  set msg.Text=Text_$GET(return)_$$$NL
+	  			  ;set $$$AppL("TLG",ChatId_"-Output-ClassMet")=$lb($lg(command,1),$lg(command,2),$lg(command,3),return,command,ChatId,token,NameFirst,NameLast)
 				} Catch ex {
 				   ;Set sc = $g(%objlasterror, $$$OK)
 				   ;Set sc = $$$ADDSC(sc, ex.AsStatus())
@@ -121,12 +122,12 @@ ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Statu
 		}
 	}
 	Catch ex {
-		set $$$AppL("TLG",ChatId_"-Error")=$ZE
+		;set $$$AppL("TLG",ChatId_"-Error")=$ZE
 	   set msg.Text=msg.Text_$g(Text)_"Error "_$ZE_$$$NL
 	}
 
 	set msg.ChatId = pInput.message.chat.id	
-	set $$$AppL("TLG",ChatId_"-Output")=$$$AppObJs(msg)
+	;set $$$AppL("TLG",ChatId_"-Output")=$$$AppObJs(msg)
 	return $$$OK
 }
 

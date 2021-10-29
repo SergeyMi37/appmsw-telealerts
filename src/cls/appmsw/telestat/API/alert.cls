@@ -1,6 +1,9 @@
+Include apptools.core
+
 Class appmsw.telestat.API.alert Extends appmsw.telestat.API.service
 {
 
+/// do ##class(%SYS.System).WriteToConsoleLog("InterSystems test",,3)
 /// Check and receive alerts from different servers and send them to subscribed users
 ClassMethod Alerts(nodens, ByRef return, command, ChatId = "", Token = "", NameFirst = "", NameLast = "") As %Status
 {
@@ -42,7 +45,7 @@ ClassMethod Alerts(nodens, ByRef return, command, ChatId = "", Token = "", NameF
 		$$$TRACE("Error "_last)
 		set message=$G(return)
 		set result=##CLASS(%ResultSet).%New("%DynamicQuery:SQL")
-		set tSC=result.Prepare("select ID,NameFirst,NameLast,Number,Access,Notify,TelegramToken,ChatId,Resource,TimeStamp,Groups,IsAdmin,Allow FROM appmsw_telestat.Bots where Notify ='Yes' and ChatId is not null")
+		set tSC=result.Prepare("select ID,NameFirst,NameLast,Number,Access,Notify,TelegramToken,ChatId,EmailsNotify,Emails,Resource,TimeStamp,Groups,IsAdmin,Allow FROM appmsw_telestat.Bots where ChatId is not null")
 		set:tSC tSC=result.Execute()
 		if '$$$ISOK(tSC) {
 			QUIT tSC
@@ -51,8 +54,15 @@ ClassMethod Alerts(nodens, ByRef return, command, ChatId = "", Token = "", NameF
 			while result.Next() {
 				set ChatId=result.Data("ChatId")
 				set TelegramToken =result.Data("TelegramToken")
-				set st=##class(appmsw.telestat.API.util).TelegramSendMessage(TelegramToken ,ChatId,"sendMessage",message)
-				$$$TRACE("Sent "_result.Data("NameFirst")_" "_result.Data("NameLast"))
+				if result.Data("Notify") ="Yes" {
+					set st=##class(appmsw.telestat.API.util).TelegramSendMessage(TelegramToken ,ChatId,"sendMessage",message)
+					$$$TRACE("Sent "_result.Data("NameFirst")_" "_result.Data("NameLast"))
+				}
+				if result.Data("EmailsNotify") {
+					set authFrom=$$$EMAILAUTH
+					set sc=##class(apptools.core.net).SendMail($$$EMAILSERVERIP,$$$EMAILSERVERPORT, 1, 1, "", authFrom, $$$EMAILAUTHPASS, authFrom, result.Data("Emails"), "Notify from "_$zu(110), message)
+					$$$TRACE("Sent emals "_$System.Status.GetErrorText(sc)_" "_result.Data("Emails")_" "_result.Data("NameFirst")_" "_result.Data("NameLast"))
+				}
 			}
 		}
 	}
@@ -74,6 +84,18 @@ ClassMethod GetAlertsFromServers(str) As %Status
 		;w !,ok
 	}
  quit $$$OK
+}
+
+/// Set Var Email
+/// zwrite ##class(appmsw.telestat.API.alert).SetVarEmail("192.168.2.11", 25, "mail@server.ru", 123456)
+ClassMethod SetVarEmail(EMAILSERVERIP, EMAILSERVERPORT, EMAILAUTH, EMAILAUTHPASS) As %Status
+{
+	zwrite ^%apptools.Setting ;quit 1
+	set user=$$$EMAILAUTH set @$zr=EMAILAUTH
+	set pass=$$$EMAILAUTHPASS set @$zr=EMAILAUTHPASS
+	set ip=$$$EMAILSERVERIP set @$zr=EMAILSERVERIP
+	set port=$$$EMAILSERVERPORT set @$zr=EMAILSERVERPORT
+	quit $$$OK
 }
 
 }

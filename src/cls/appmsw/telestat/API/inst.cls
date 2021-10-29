@@ -3,28 +3,28 @@ Class appmsw.telestat.API.inst Extends %Persistent
 {
 
 /// Name
-Property Name As %String;
+Property Name As %String(MAXLEN = "");
 
 /// User Name 
-Property UserName As %String;
+Property UserName As %String(MAXLEN = "");
 
 /// User Password 
-Property UserPass As %String;
+Property UserPass As %String(MAXLEN = "");
 
 /// Is Enabled
 Property Enabled As %Integer;
 
 /// Host:Port
-Property HostPort As %String;
+Property HostPort As %String(MAXLEN = "");
 
 /// Date and time last change
 Property EditedDataTime As %TimeStamp [ InitialExpression = {$zdt($h, 3, 1)} ];
 
 /// Endpoint Service Products http://servname/apptoolsrest/products/ ;  ##class(apptools.core.rest).getProductions
-Property ServiceProducts As %String;
+Property ServiceProducts As %String(MAXLEN = "");
 
 /// Endpoint Service Alerts http://servname/apptoolsrest/alerts/3" ;alerts for 3 days  ##class(apptools.core.rest).GetAlerts
-Property ServiceAlerts As %String;
+Property ServiceAlerts As %String(MAXLEN = "");
 
 Index idxName On Name;
 
@@ -33,17 +33,23 @@ Index idxEditedDataTime On EditedDataTime [ Type = bitslice ];
 /// if ##class(appmsw.telestat.API.inst).GetList(,.list)
 ClassMethod GetList(Name = "", ByRef list) As %Status
 {
-	 set sql="Select ServiceProducts,UserName,UserPass,Name,ServiceAlerts,Enabled FROM appmsw_telestat_API.inst"
-	 if Name'="" set sql=sql_" where Name='"_Name_"'"
+	 set sql="Select ServiceProducts,UserName,UserPass,Name,ServiceAlerts,Enabled FROM appmsw_telestat_API.inst where Enabled=1"
+	 if Name'="" set sql=sql_" and Name='"_Name_"'"
 	 do ##class(apptools.core.sys).SaveSQL(sql,"^||list")
 	 merge list=^||list
  	quit $$$OK
 }
 
-/// write ##class(appmsw.telestat.API.inst).AddInst("test",1,"_system","SYS","http://test:52773/apptoolsrest/products/","http://test:52773/apptoolsrest/products/alerts/3")
-ClassMethod AddInst(Name, Enabled = "", UserName = "", UserPass = "", ServiceProducts = "", ServiceAlerts = "") As %Status
+/// write $System.Status.GetErrorText(##class(appmsw.telestat.API.inst).EditInst("test",1,"_system","SYS","http://localhost:52773"))
+ClassMethod EditInst(Name, Enabled = "", UserName = "", UserPass = "", HostPort = "") As %Status
 {
-	set obj=##class(appmsw.telestat.API.inst).%New()
+	#dim obj As appmsw.telestat.API.inst = ""
+	if Name="" $$$ThrowOnError($$$ERROR($$$GeneralError,"Name is empty"))
+	do ..GetByName(Name,.id)
+	if id'="" set obj=..%OpenId(id)
+	if '$iso(obj) Set obj = ..%New()
+	set ServiceProducts=HostPort_"/apptoolsrest/products/"
+	set ServiceAlerts=HostPort_"/apptoolsrest/alerts/3"
 	set obj.Name=Name
 	set obj.Enabled=Enabled
 	set obj.UserName=UserName
@@ -51,6 +57,24 @@ ClassMethod AddInst(Name, Enabled = "", UserName = "", UserPass = "", ServicePro
 	set obj.ServiceProducts=ServiceProducts
 	set obj.ServiceAlerts=ServiceAlerts
 	quit obj.%Save()
+}
+
+/// Get instance
+/// do ##class(appmsw.telestat.API.inst).GetByName("test",.id) 
+ClassMethod GetByName(name, id) As %Status
+{
+	Set tQuery = "select * from appmsw_telestat_API.inst where Name='"_name_"'"
+	Set tRes = ##class(%SQL.Statement).%ExecDirect(,tQuery)
+	set name="",id=""
+	If (tRes.%SQLCODE < 0) {
+		Throw ##class(%Exception.SQL).CreateFromSQLCODE(tRes.%SQLCODE,tRes.%Message)
+	}
+	While tRes.%Next(.tSC) {
+		$$$ThrowOnError(tSC)
+		Set name=tRes.%Get("Name")
+		set id=tRes.%Get("ID")
+	}
+	quit $$$OK
 }
 
 Storage Default

@@ -5,12 +5,7 @@ Class appmsw.telestat.API.commands Extends appmsw.telestat.API.service
 ClassMethod GetCommands(ByRef comm, ChatId = "", Token = "", NameFirst = "", NameLast = "") As %Status
 {
 	// Header 
-	;set comm="Service for tracking the status of Ensemble and IRIS servers. Can receive commands: "_$$$NL
-	//s comm("/CommandName")=$listbuild("class","method",arg."Description","routine")
-	;set comm("/ServersStatus")=$listbuild("appmsw.telestat.API.status","ServersStatus","","Get a list of monitored instances","")
-	;set comm("/GetLastAlerts")=$listbuild("appmsw.telestat.API.commands","GetAlerts","","Get last alerts. Server: '"_$Zu(110)_"'","")
-	
-	set comm="Сервис для мониторинга событий. Вы можете вводить команды: "_$$$NL
+	set comm="Service for monitoring the status of Ensemble and IRIS servers. Can receive commands: "_$$$NL
 	set comm("/ServersStatus")=$listbuild("appmsw.telestat.API.status","ServersStatus","","Get a list of monitored instances","")
 	set comm("/GetLastAlerts")=$listbuild("appmsw.telestat.API.commands","GetAlerts","","Get last alerts. Server: '"_$Zu(110)_"'","")
 	// commands for admin

@@ -44,6 +44,12 @@ Property Groups As %String(MAXLEN = "");
 /// Roles
 Property Roles As %String(MAXLEN = "");
 
+/// Emails
+Property Emails As %String(MAXLEN = "");
+
+/// Emails Notify
+Property EmailsNotify As %Integer;
+
 /// Number of commands sent
 Property NumCommSent As %Integer;
 
@@ -151,6 +157,21 @@ ClassMethod GetAllow(Token As %String = "", Number As %String = "", ChatId As %S
 	Quit $$$OK
 }
 
+/// Update Emails Notyfication
+/// write ##class(appmsw.telestat.Bots).UpdateEmails(79071112233,1,"mail@email.com",1)
+ClassMethod UpdateEmails(phone, IsAdmin = 0, Emails = "", Noty = 0) As %Status
+{
+	#dim obj As appmsw.telestat.Bots
+	set obj=##class(appmsw.telestat.Bots).GetObjByNumber(phone,IsAdmin)
+	if $isobject(obj) {
+		set obj.Emails=Emails
+		,obj.EmailsNotify=Noty
+		Quit obj.%Save()
+	} else {
+		Quit "0"			
+	}
+}
+
 Storage Default
 {
 <Data name="BotsDefaultData">
@@ -201,6 +222,12 @@ Storage Default
 </Value>
 <Value name="16">
 <Value>Notify</Value>
+</Value>
+<Value name="17">
+<Value>Emails</Value>
+</Value>
+<Value name="18">
+<Value>EmailsNotify</Value>
 </Value>
 </Data>
 <DataLocation>^appmsw.telestat.BotsD</DataLocation>
