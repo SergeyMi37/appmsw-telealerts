@@ -53,5 +53,6 @@ $ docker-compose exec iris iris session iris
 
 ## Installation
 
-[Instruction-en](https://raw.githubusercontent.com/SergeyMi37/appmsw-telealerts/main/doc/Install-appmsw-telealerts-en-v2.pdf)
-[Инструкция-ru](https://raw.githubusercontent.com/SergeyMi37/appmsw-telealerts/main/doc/Install-appmsw-telealerts-ru-v2.pdf)
+1 [Instruction-en](https://raw.githubusercontent.com/SergeyMi37/appmsw-telealerts/main/doc/Install-appmsw-telealerts-en-v2.pdf)
+
+2 [Инструкция-ru](https://raw.githubusercontent.com/SergeyMi37/appmsw-telealerts/main/doc/Install-appmsw-telealerts-ru-v2.pdf)
