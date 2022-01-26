@@ -7,7 +7,7 @@
 ![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telealerts/main/doc/status-serv.png)
 ## appmsw-telealerts
 [![Gitter](https://img.shields.io/badge/Available%20on-Intersystems%20Open%20Exchange-00b2a9.svg)](https://openexchange.intersystems.com/package/appmsw-telealerts)
-[![Demo](https://img.shields.io/badge/Demo%20on-GCR-black)](https://telealerts.demo.community.intersystems.com/apptools/apptools.core.LogInfo.cls)
+[![Demo](https://img.shields.io/badge/Demo%20on-GCR-black)](https://telealerts.demo.community.intersystems.com/csp/sys/%25CSP.Portal.Home.zen?$NAMESPACE=USER)
 
 Organization of message notification and provision of information to users of the messenger Telegam using two bots.
 
