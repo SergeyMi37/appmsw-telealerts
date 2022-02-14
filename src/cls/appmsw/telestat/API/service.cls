@@ -6,6 +6,8 @@ Class appmsw.telestat.API.service Extends Ens.BusinessService
 /// We use the global node to save and transfer private information between information exchange sessions
 Parameter GNtmp = "^appmsw.telestat.tmp";
 
+Parameter GNdebug = "^appmsw.telestat.debug";
+
 /// Check for permission to send info
 ClassMethod IsPermiss(token, ChatId, phone = "0") As %Status
 {
@@ -33,8 +35,10 @@ ClassMethod InitMessage(pInput As %RegisteredObject, Token, Output msg, ChatId, 
 {
     set msg = ##class(appmsw.telestat.Msg.TextRequest).%New()
     set ChatId = pInput.message.chat.id ;user chat id
-	;set $$$AppL("TLG",ChatId_"-input")=$$$AppObJs(pInput)
-	;set $$$AppL("TLG",ChatId_"-input-Token")=Token
+	if $get(@##class(appmsw.telestat.API.service).#GNdebug) {
+		set $$$AppL("TLG",ChatId_"-input")=$$$AppObJs(pInput)
+		set $$$AppL("TLG",ChatId_"-input-Token")=Token
+	}
     set NameFirst=pInput.message.from."first_name"
     set NameLast=pInput.message.from."last_name"
 	if '$D(@..#GNtmp@("Users"_IsAdmin,ChatId)) set @..#GNtmp@("Users",ChatId)=$LB(NameFirst,NameLast)
@@ -122,12 +126,12 @@ ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Statu
 		}
 	}
 	Catch ex {
-		;set $$$AppL("TLG",ChatId_"-Error")=$ZE
+	   if $get(@##class(appmsw.telestat.API.service).#GNdebug) set $$$AppL("TLG",ChatId_"-Error")=$ZE
 	   set msg.Text=msg.Text_$g(Text)_"Error "_$ZE_$$$NL
 	}
 
 	set msg.ChatId = pInput.message.chat.id	
-	;set $$$AppL("TLG",ChatId_"-Output")=$$$AppObJs(msg)
+	if $get(@##class(appmsw.telestat.API.service).#GNdebug) set $$$AppL("TLG",ChatId_"-Output")=$$$AppObJs(msg)
 	return $$$OK
 }
 

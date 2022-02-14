@@ -232,6 +232,7 @@ Storage Default
 </Data>
 <DataLocation>^appmsw.telestat.BotsD</DataLocation>
 <DefaultData>BotsDefaultData</DefaultData>
+<ExtentSize>0</ExtentSize>
 <IdLocation>^appmsw.telestat.BotsD</IdLocation>
 <IndexLocation>^appmsw.telestat.BotsI</IndexLocation>
 <StreamLocation>^appmsw.telestat.BotsS</StreamLocation>

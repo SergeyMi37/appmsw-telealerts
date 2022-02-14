@@ -1,3 +1,5 @@
+Include apptools.core
+
 Class appmsw.telestat.TelegramService Extends Ens.BusinessService
 {
 
@@ -16,7 +18,7 @@ Method OnProcessInput(pInput As %RegisteredObject, Output pOutput As %Registered
 		return $$$OK // skipping, if update type not equal to "message" 
 	}
 	$$$TRACE(pInput.message.chat.id)
-	;set $$$AppL("TLG","-input--")=$$$AppObJs(pInput)
+	if $g(@##class(appmsw.telestat.API.service).#GNdebug) set $$$AppL("TLG","-OnProcessInput-input--")=$$$AppObJs(pInput)
 	
 	;do ##class(appmsw.telestat.API.service).GetMessage(..Adapter.TelegramToken,pInput,.msg)
 	s st=$classmethod(..ClassMessage,"GetMessage",..Adapter.TelegramToken,pInput,.msg)

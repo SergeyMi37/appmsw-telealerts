@@ -4,6 +4,28 @@ Class appmsw.telestat.API.util [ Abstract ]
 
 Parameter TELESERVER = "api.telegram.org";
 
+/// write ##class(appmsw.telestat.API.util).oneline()
+ClassMethod oneline(TokenAdmin, NumberAdmin, TokenInformer) As %String
+{
+ set b("admin")=$lb("admin",TokenAdmin,NumberAdmin),b("informer")=$lb("informer",TokenInformer) 
+ write ##class(appmsw.telestat.API.util).Init(.b)	
+ do ##class(appmsw.telestat.API.util).InitProd("appmsw.telestat.Production")
+ quit $$$OK
+}
+
+/// do ##class(appmsw.telestat.API.util).InitProd("appmsw.telestat.Production")
+ClassMethod InitProd(pn = "") As %Status
+{
+	if '##class(Ens.Director).IsProductionRunning(pn) {
+	    w !,"Run prod "_pn
+		;job ##class(Ens.Director).StartProduction(pn)::1
+		do ##class(Ens.Director).StartProduction(pn)
+		;do ##class(Ens.Director).SetAutoStart(pn)
+		;else   w !," no job start"
+	}
+    return $$$OK
+}
+
 /// write ##class(appmsw.telestat.API.util).Init()
 /// set b("admin")=$lb("admin","123"),b("informer")=$lb("informer","321") write ##class(appmsw.telestat.API.util).Init(.b)
 ClassMethod Init(ByRef bots) As %String
@@ -69,7 +91,7 @@ Again2		write !,"Enter the token to access of the "_bot_" bot "
 			write " ["_token_"]"
 			set number=""
 			if bot="admin" {
-Again3			write !,"Enter the number phone of the "_bot_" bot "
+Again3			write !,"Enter the number phone of the "_bot_" bot [+7(999)777-11-00] "
 				read number
 				if number="" write !," You entered an empty value" goto Again3
 				set number=$tr(number,"-()+")

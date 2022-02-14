@@ -1,4 +1,5 @@
-/// Include apptools.core
+Include apptools.core
+
 /// Admin bot
 Class appmsw.telestat.API.admin Extends appmsw.telestat.API.service
 {
@@ -117,7 +118,7 @@ ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Statu
 	   set msg.Text=msg.Text_$g(Text)_"Error "_$ZE_$$$NL
 	}
 	set msg.ChatId = pInput.message.chat.id	
-	;set $$$AppL("ADM",ChatId_"-Output")=$$$AppObJs(msg)
+	if $get(@##class(appmsw.telestat.API.service).#GNdebug) set $$$AppL("ADM",ChatId_"-Output")=$$$AppObJs(msg)
 	return $$$OK
 }
 

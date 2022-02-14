@@ -110,6 +110,7 @@ Storage Default
 </Data>
 <DataLocation>^appmsw.telestat.API.instD</DataLocation>
 <DefaultData>instDefaultData</DefaultData>
+<ExtentSize>0</ExtentSize>
 <IdLocation>^appmsw.telestat.API.instD</IdLocation>
 <IndexLocation>^appmsw.telestat.API.instI</IndexLocation>
 <StreamLocation>^appmsw.telestat.API.instS</StreamLocation>

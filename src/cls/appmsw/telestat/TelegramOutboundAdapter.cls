@@ -1,3 +1,5 @@
+Include apptools.core
+
 Class appmsw.telestat.TelegramOutboundAdapter Extends Ens.OutboundAdapter
 {
 
@@ -56,9 +58,9 @@ Method SendButton(chatId As %String, text As %String, buttonText As %String = ""
 	set obj = {"one_time_keyboard":true,"resize_keyboard":true}
 	set obj.keyboard = []
 	do obj.keyboard.%Push(buttons)
-	;set $$$AppL("TLG",chatId_"-Butt-obj")=$$$AppObJs(obj)
+	if $g(@##class(appmsw.telestat.API.service).#GNdebug) set $$$AppL("TLG",chatId_"-Butt-obj")=$$$AppObJs(obj)
 	set res = ..API.SendMessage(chatId,text,,,,,obj)
-	;set $$$AppL("TLG",chatId_"-But-res2")=$$$AppObJs(res)
+	if $g(@##class(appmsw.telestat.API.service).#GNdebug) set $$$AppL("TLG",chatId_"-But-res2")=$$$AppObJs(res)
 	if (res.ok) {
 		return res.result."message_id"
 	}
