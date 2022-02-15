@@ -2,7 +2,7 @@
 <Export generator="IRIS" version="26">
 <Document name="appmsw-telealerts.ZPM"><Module>
   <Name>appmsw-telealerts</Name>
-  <Version>1.0.11</Version>
+  <Version>1.1.0</Version>
   <Description>Products for informing and notifying via telegram messenger and email</Description>
   <Packaging>module</Packaging>
   <SourcesRoot>src</SourcesRoot>
@@ -16,5 +16,6 @@
     <Invoke Class="appmsw.telestat.API.util" Method="Init"/>
   </Invokes>
   <SystemRequirements Interoperability="enabled" Version=">=2019.1"/>
+  <CSPApplication CookiePath="/telealerts/" DefaultTimeout="900" DispatchClass="appmsw.telestat.RESTBroker" MatchRoles=":%All" PasswordAuthEnabled="0" Recurse="1" ServeFiles="1" ServeFilesTimeout="3600" UnauthenticatedEnabled="1" Url="/telealerts" UseSessionCookie="2"/>
   <Resource Name="appmsw.telestat.PKG"/>
 </Module></Document></Export>
