@@ -54,6 +54,8 @@ $ docker-compose build
 $ docker-compose up -d
 $ docker-compose exec iris iris session iris
 ```
+[Demo Server SMP](https://telealerts.demo.community.intersystems.com/csp/sys/UtilHome.csp)    
+[Demo Server WebTerminal](https://telealerts.demo.community.intersystems.com/terminal/)      
 
 ## Installation
 
